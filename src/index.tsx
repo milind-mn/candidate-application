@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Jobs } from "./components/JobsPage";
+import { Jobs } from "./Pages/JobsPage";
 import reportWebVitals from "./reportWebVitals";
 
 import "./index.css";
