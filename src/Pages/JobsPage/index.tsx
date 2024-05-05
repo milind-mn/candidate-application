@@ -1,6 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
 
-import { Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from "@mui/material";
 import { RootState } from "../../reducers";
 import { JobCard } from "./components/Card";
 import { fetchJobs } from "./components/Card/service";
@@ -12,6 +22,8 @@ export const Jobs: React.FC = () => {
   const dispatch = useDispatch();
   const [offset, setOffSet] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedRole, setSelectedRole] = useState<string>();
+  const [experience, setExperience] = useState<number>();
   const { jobs } = useSelector((state: RootState) => state.jobList);
 
   useEffect(() => {
@@ -53,6 +65,60 @@ export const Jobs: React.FC = () => {
 
   return (
     <Fragment>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          p: 2,
+        }}
+      >
+        <Box sx={{ display: "flex" }}>
+          <FormControl>
+            <InputLabel id="role-select-label">{"Role"}</InputLabel>
+            <Select
+              labelId="role-select-label"
+              placeholder="Select Role"
+              onChange={(e: SelectChangeEvent) =>
+                setSelectedRole(e.target.value)
+              }
+              disabled={loading}
+              label="Role"
+              defaultValue=""
+              value={selectedRole}
+              style={{ backgroundColor: "white", width: "200px" }}
+            >
+              <MenuItem value={"All"}>{"All"}</MenuItem>
+              {Array.from(
+                new Map(
+                  jobs?.map((jobData: any) => [jobData?.jobRole, jobData])
+                ).values()
+              )?.map((jobData: any) => {
+                return (
+                  <MenuItem key={jobData?.jdUid} value={jobData?.jobRole}>
+                    {jobData?.jobRole}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <FormControl sx={{ ml: 1 }}>
+            <TextField
+              type="number"
+              id="outlined-basic"
+              label="Experience"
+              variant="outlined"
+              value={experience}
+              onChange={(e: any) => {
+                setExperience(e?.target?.value);
+              }}
+            />
+          </FormControl>
+        </Box>
+        <Button variant="contained" color="secondary">
+          {"Reset Filters"}
+        </Button>
+      </Box>
       <Grid container spacing={3} sx={{ p: 2 }}>
         {jobs?.length > 0 && (
           <Fragment>
