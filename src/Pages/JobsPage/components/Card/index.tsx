@@ -1,5 +1,5 @@
 import React, { Fragment, memo, useState } from "react";
-import { EstimatedSalary } from "./Salary";
+
 import {
   Box,
   Button,
@@ -10,6 +10,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
+import { EstimatedSalary } from "./Salary";
 import BoltIcon from "@mui/icons-material/Bolt";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 
@@ -17,27 +18,27 @@ interface Props {
   minExp: number;
   logoUrl: string;
   jobRole: string;
+  jobLink: string;
   location: string;
   companyName: string;
   salaryCurrencyCode: string;
   maxJdSalary: number | null;
   minJdSalary: number | null;
   jobDetailsFromCompany: string;
-  jobLink:string;
 }
 
 export const JobCard: React.FC<Props> = memo(
   ({
-    companyName = "",
+    minExp = 0,
+    jobLink = "",
     logoUrl = "",
     jobRole = "",
     location = "",
-    salaryCurrencyCode = "",
+    companyName = "",
     maxJdSalary = null,
     minJdSalary = null,
+    salaryCurrencyCode = "",
     jobDetailsFromCompany = "",
-    jobLink="",
-    minExp = 0,
   }) => {
     const [collapseJobInfo, setCollapse] = useState<boolean>(false);
 
@@ -82,22 +83,24 @@ export const JobCard: React.FC<Props> = memo(
               </Typography>
             </Box>
           </Box>
-          <EstimatedSalary
-            salaryCurrencyCode={salaryCurrencyCode}
-            maximumSalary={maxJdSalary}
-            minimumSalary={minJdSalary}
-          />
-          <Typography sx={{ fontSize: 16 }} color="text.primary">
-            {"About Company:"}
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14 }}
-            color="text.primary"
-            fontWeight="bold"
-            gutterBottom
-          >
-            {"About us"}
-          </Typography>
+          <Box>
+            <EstimatedSalary
+              salaryCurrencyCode={salaryCurrencyCode}
+              maximumSalary={maxJdSalary}
+              minimumSalary={minJdSalary}
+            />
+            <Typography sx={{ fontSize: 16 }} color="text.primary">
+              {"About Company:"}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.primary"
+              fontWeight="bold"
+              gutterBottom
+            >
+              {"About us"}
+            </Typography>
+          </Box>
           <Collapse in={collapseJobInfo} collapsedSize={75}>
             <Typography sx={{ fontSize: 14 }} color="text.primary">
               {jobDetailsFromCompany}
@@ -138,7 +141,7 @@ export const JobCard: React.FC<Props> = memo(
             </Button>
             <Button
               variant="contained"
-              startIcon={<PeopleAltIcon/>}
+              startIcon={<PeopleAltIcon />}
               sx={{ width: "100%", mt: 1, backgroundColor: "#4a43d9" }}
             >
               {"Unlock Referral asks"}

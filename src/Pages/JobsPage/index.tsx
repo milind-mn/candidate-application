@@ -1,51 +1,44 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
-import { data } from "./data";
-import { Container, Grid } from "@mui/material";
+import React, { Fragment, useEffect, useState } from "react";
+
+import { Grid } from "@mui/material";
 import { JobCard } from "./components/Card";
 import { fetchJobs } from "./components/Card/service";
 import { Loading } from "../../components/LoadingSpinner";
 
 export const Jobs: React.FC = () => {
-  const [jobs, setJobs] = useState<Array<any>>([]);
-  const mainRef = useRef<HTMLDivElement>(null);
-  console.log("---", jobs);
-  const [loading, setLoading] = useState<boolean>(false);
   const [offset, setOffSet] = useState<number>(0);
-  console.log("---offset", offset);
+  const [jobs, setJobs] = useState<Array<any>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     getJobList();
-  }, []);
-
-  const handleScroll = (event: any) => {
-    const element = event.currentTarget;
-    if (
-      Math.abs(
-        element.scrollHeight - element.clientHeight - element.scrollTop
-      ) < 1
-    ) {
-      setOffSet((prev: number) => prev + 1);
-    }
-  };
+  }, [offset]);
 
   useEffect(() => {
-    const mainElement = mainRef.current;
-    console.log("--",mainElement);
-    if (mainElement) {
-      mainElement.addEventListener("scroll", handleScroll);
-      return () => {
-        mainElement.removeEventListener("scroll", handleScroll);
-      };
-    } else {
-      console.error("Main element not found.");
-    }
+    const handleScroll = (): void => {
+      const windowHeight: number = window.innerHeight;
+      const documentHeight: number = document.documentElement.scrollHeight;
+      const scrollTop: number =
+        window.scrollY ||
+        document.body.scrollTop + (document.documentElement.scrollTop || 0);
+      // Check if the user has scrolled to the end of the page
+      if (windowHeight + scrollTop >= documentHeight) {
+        setOffSet((prev: number) => prev + 1);
+      }
+    };
+    // Attach the scroll event listener
+    window.addEventListener("scroll", handleScroll);
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  const getJobList = async () => {
+  const getJobList = async (): Promise<void> => {
     setLoading(true);
     try {
       const response: Awaited<{ jdList: Array<any>; totalCount: number }> =
-        await fetchJobs(12, 0);
+        await fetchJobs(12, offset);
       setJobs((prev: Array<any>) => [...prev, ...response?.jdList]);
     } catch (error: unknown) {
       console.error(error);
@@ -55,7 +48,7 @@ export const Jobs: React.FC = () => {
   };
 
   return (
-    <div ref={mainRef}>
+    <Fragment>
       <Grid container spacing={3} sx={{ p: 2 }}>
         {jobs?.length > 0 && (
           <Fragment>
@@ -79,8 +72,8 @@ export const Jobs: React.FC = () => {
             })}
           </Fragment>
         )}
-        {loading && <Loading />}
       </Grid>
-    </div>
+      {loading && <Loading />}
+    </Fragment>
   );
 };
