@@ -1,4 +1,5 @@
-import React from "react";
+import store from "./store/store";
+import { Provider } from "react-redux";
 import ReactDOM from "react-dom/client";
 import { Jobs } from "./Pages/JobsPage";
 import reportWebVitals from "./reportWebVitals";
@@ -8,7 +9,11 @@ import "./index.css";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-root.render(<Jobs />);
+root.render(
+  <Provider store={store}>
+    <Jobs />
+  </Provider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

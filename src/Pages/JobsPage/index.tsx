@@ -1,14 +1,18 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import { Grid } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import { JobCard } from "./components/Card";
 import { fetchJobs } from "./components/Card/service";
 import { Loading } from "../../components/LoadingSpinner";
+import { fetchJobsSuccess } from "../../reducers/jobListReducer";
+import { RootState } from "../../reducers";
 
 export const Jobs: React.FC = () => {
+  const dispatch = useDispatch();
   const [offset, setOffSet] = useState<number>(0);
-  const [jobs, setJobs] = useState<Array<any>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const { jobs } = useSelector((state: RootState) => state.jobList);
 
   useEffect(() => {
     getJobList();
@@ -39,7 +43,8 @@ export const Jobs: React.FC = () => {
     try {
       const response: Awaited<{ jdList: Array<any>; totalCount: number }> =
         await fetchJobs(12, offset);
-      setJobs((prev: Array<any>) => [...prev, ...response?.jdList]);
+      dispatch(fetchJobsSuccess(response?.jdList));
+      //setJobs((prev: Array<any>) => [...prev, ...response?.jdList]);
     } catch (error: unknown) {
       console.error(error);
     } finally {
