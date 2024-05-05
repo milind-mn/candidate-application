@@ -1,9 +1,8 @@
-import { combineReducers } from "@reduxjs/toolkit";
 import jobListReducer from "./jobListReducer";
+import { combineReducers } from "@reduxjs/toolkit";
 
 const rootReducer = combineReducers({
   jobList: jobListReducer,
-  // Add other reducers here if needed
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

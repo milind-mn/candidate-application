@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
 
 import { Grid } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../reducers";
 import { JobCard } from "./components/Card";
 import { fetchJobs } from "./components/Card/service";
+import { useDispatch, useSelector } from "react-redux";
 import { Loading } from "../../components/LoadingSpinner";
 import { fetchJobsSuccess } from "../../reducers/jobListReducer";
-import { RootState } from "../../reducers";
 
 export const Jobs: React.FC = () => {
   const dispatch = useDispatch();
@@ -44,7 +44,6 @@ export const Jobs: React.FC = () => {
       const response: Awaited<{ jdList: Array<any>; totalCount: number }> =
         await fetchJobs(12, offset);
       dispatch(fetchJobsSuccess(response?.jdList));
-      //setJobs((prev: Array<any>) => [...prev, ...response?.jdList]);
     } catch (error: unknown) {
       console.error(error);
     } finally {
