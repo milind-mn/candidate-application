@@ -2,6 +2,11 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Author - Milind Naik
+Developed using node version - v20.12.2
+Clone the repo, Change directory into the folder
+run commands `npm install` and `npm start`
+
 ## Available Scripts
 
 In the project directory, you can run:
